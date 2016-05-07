@@ -1,9 +1,6 @@
 ;
-; JamesM Tutorial COFF Loader
-;
 ; File:				fdboot.s
 ; Description:		Floppy disk boot block
-;					Uses unreal mode to load a COFF kernel
 ; Author:			James Smith
 ; Created:			14-Oct-2012
 ;
