@@ -1,0 +1,401 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.text           0x00101000     0x4000
+                0x00101000                code = .
+                0x00101000                _code = .
+                0x00101000                __code = .
+ *(.text)
+ .text          0x00101000       0x2b boot.o
+                0x00101002                mboot
+                0x00101022                start
+ *fill*         0x0010102b        0x5 00
+ .text          0x00101030      0x400 main.o
+                0x001010a0                main
+ .text          0x00101430      0x2b0 common.o
+                0x00101430                operator new(unsigned long)
+                0x00101443                operator new[](unsigned long)
+                0x00101456                operator delete(void*)
+                0x00101469                operator delete[](void*)
+                0x00101493                __cxa_pure_virtual
+                0x001014a9                OUTPORT_BYTE(unsigned short, unsigned char)
+                0x001014c5                INPORT_BYTE(unsigned short)
+                0x001014ed                OUTBYTE(unsigned short, unsigned short)
+                0x0010150b                INPORT_WORD(unsigned short)
+                0x00101536                memset(void*, unsigned char, unsigned long)
+                0x00101568                strcpy(char*, char const*)
+                0x0010158b                strcmp(char const*, char const*)
+                0x001015d7                strlen(char const*)
+                0x001015ff                kprintf(char const*, ...)
+ .text          0x001016e0      0x1e6 interrupt.o
+                0x001016e0                GDT_FLUSH
+                0x001016fd                IDT_FLUSH
+                0x00101705                ISR0
+                0x0010170f                ISR1
+                0x00101719                ISR2
+                0x00101723                ISR3
+                0x0010172d                ISR4
+                0x00101737                ISR5
+                0x00101741                ISR6
+                0x0010174b                ISR7
+                0x00101755                ISR8
+                0x0010175f                ISR9
+                0x00101769                ISR10
+                0x00101773                ISR11
+                0x0010177d                ISR12
+                0x00101787                ISR13
+                0x0010178e                ISR14
+                0x00101795                ISR15
+                0x0010179c                ISR16
+                0x001017a3                ISR17
+                0x001017aa                ISR18
+                0x001017b1                ISR19
+                0x001017b8                ISR20
+                0x001017bf                ISR21
+                0x001017c6                ISR22
+                0x001017cd                ISR23
+                0x001017d4                ISR24
+                0x001017db                ISR25
+                0x001017e2                ISR26
+                0x001017e9                ISR27
+                0x001017f0                ISR28
+                0x001017f7                ISR29
+                0x001017fe                ISR30
+                0x00101805                ISR31
+                0x00101831                IRQ0
+                0x00101838                IRQ1
+                0x0010183f                IRQ2
+                0x00101846                IRQ3
+                0x0010184d                IRQ4
+                0x00101854                IRQ5
+                0x0010185b                IRQ6
+                0x00101862                IRQ7
+                0x00101869                IRQ8
+                0x00101870                IRQ9
+                0x00101877                IRQ10
+                0x0010187e                IRQ11
+                0x00101885                IRQ12
+                0x0010188c                IRQ13
+                0x00101893                IRQ14
+                0x0010189a                IRQ15
+ *fill*         0x001018c6        0xa 00
+ .text          0x001018d0      0x1a0 gdt.o
+                0x001018d0                gdt_Init()
+                0x001019d4                gdt_SetGate(int, unsigned int, unsigned int, unsigned char, unsigned char)
+ .text          0x00101a70      0xa10 idt.o
+                0x00101a70                isr_handler
+                0x00101a98                irq_handler
+                0x00101ac0                idt_Init()
+                0x001022d8                idt_SetGate(int, unsigned int, unsigned short, unsigned char)
+                0x00102332                idt_RegisterHandler(unsigned char, void (*)(registers))
+                0x00102360                idt_HandleIRQ(registers)
+                0x0010240b                idt_HandleISR(registers)
+ .text          0x00102480      0x3d0 console.o
+                0x00102512                con_Init()
+                0x0010252f                con_Clear()
+                0x00102590                con_UpdateCursor()
+                0x0010261f                con_Write(char const*)
+                0x0010265b                con_WriteChar(char)
+                0x0010270f                con_WriteHexDigit(unsigned char)
+                0x00102753                con_WriteHex(unsigned int)
+                0x001027a7                con_WriteDec(unsigned int)
+ .text          0x00102850      0x6e0 pmm.o
+                0x001029f3                pmm_AllocFrame(page_table_entry*, int, int)
+                0x00102aa3                pmm_FreeFrame(page_table_entry*)
+                0x00102adc                pmm_Init()
+                0x00102d23                pmm_SwitchDirectory(page_directory*)
+                0x00102d56                pmm_GetPageEntry(unsigned int, int, page_directory*)
+                0x00102e5b                pmm_PageFaultHandler(registers)
+ .text          0x00102f30      0xa00 heap.o
+                0x00102fc4                kmalloc(unsigned long)
+                0x00102fe7                kmalloc_aligned(unsigned long)
+                0x0010300a                kmalloc_physical(unsigned long, unsigned int*)
+                0x0010302c                kmalloc_alignedphysical(unsigned long, unsigned int*)
+                0x0010304e                kfree(void*)
+                0x00103074                KernelHeap::KernelHeap()
+                0x00103074                KernelHeap::KernelHeap()
+                0x0010307a                KernelHeap::StartHeap(OrderedArray<header_t*>*, unsigned int, unsigned int, unsigned int, unsigned char, unsigned char)
+                0x0010311e                KernelHeap::FindSmallestHole(unsigned int, unsigned char)
+                0x001031e4                KernelHeap::Alloc(unsigned int, unsigned char)
+                0x00103556                KernelHeap::Free(void*)
+                0x001037ba                KernelHeap::Expand(unsigned int)
+                0x00103884                KernelHeap::Contract(unsigned int)
+ .text          0x00103930        0x0 dev.o
+ .text          0x00103930       0xd0 pit.o
+                0x00103972                PITDevice::InitDevice()
+ .text          0x00103a00      0x580 vfs.o
+                0x00103a00                vfs_Init()
+                0x00103a34                RootFS::RootFS()
+                0x00103a34                RootFS::RootFS()
+                0x00103b10                RootFS::Read(unsigned int, unsigned int, unsigned int, unsigned char*, unsigned int*)
+                0x00103b1a                RootFS::Write(unsigned int, unsigned int, unsigned int, unsigned char*, unsigned int*)
+                0x00103b24                RootFS::Open(unsigned int, unsigned int, unsigned int)
+                0x00103b2e                RootFS::Close(unsigned int)
+                0x00103b38                RootFS::ReadDir(unsigned int, unsigned int, VFSNode**)
+                0x00103bbc                RootFS::FindDir(unsigned int, char const*, VFSNode**)
+                0x00103c66                vfs_GetRootNode()
+                0x00103c7e                VFS::VFS()
+                0x00103c7e                VFS::VFS()
+                0x00103cec                VFS::Mount(char const*, FileSystem*)
+                0x00103d1a                RootFS::Mount(char const*, FileSystem*)
+                0x00103d7c                VFSNode::VFSNode(char const*, unsigned int, unsigned int, unsigned int, FileSystem*)
+                0x00103d7c                VFSNode::VFSNode(char const*, unsigned int, unsigned int, unsigned int, FileSystem*)
+                0x00103dc6                VFSNode::Read(unsigned int, unsigned int, unsigned char*, unsigned int*)
+                0x00103e18                VFSNode::Write(unsigned int, unsigned int, unsigned char*, unsigned int*)
+                0x00103e6c                VFSNode::Open(unsigned int, unsigned int)
+                0x00103eb2                VFSNode::Close()
+                0x00103ee6                VFSNode::ReadDir(unsigned int, VFSNode**)
+                0x00103f2c                VFSNode::FindDir(char const*, VFSNode**)
+ *(.gnu.linkonce.t.*)
+ .gnu.linkonce.t._ZN7VFSNode4NameEv
+                0x00103f80       0x10 main.o
+                0x00103f80                VFSNode::Name()
+ .gnu.linkonce.t._ZN6DeviceC2Ev
+                0x00103f90       0x10 main.o
+                0x00103f90                Device::Device()
+ .gnu.linkonce.t._ZN9PITDeviceC1Ev
+                0x00103fa0       0x20 main.o
+                0x00103fa0                PITDevice::PITDevice()
+ .gnu.linkonce.t._ZN11IEnumerableIiEC2Ev
+                0x00103fc0       0x10 main.o
+                0x00103fc0                IEnumerable<int>::IEnumerable()
+ .gnu.linkonce.t._ZN4ListIiEC1Ev
+                0x00103fd0       0x40 main.o
+                0x00103fd0                List<int>::List()
+ .gnu.linkonce.t._ZN4ListIiE3AddEi
+                0x00104010       0x80 main.o
+                0x00104010                List<int>::Add(int)
+ .gnu.linkonce.t._ZN4ListIiE13GetEnumeratorEv
+                0x00104090       0x30 main.o
+                0x00104090                List<int>::GetEnumerator()
+ .gnu.linkonce.t._ZN4ListIiED1Ev
+                0x001040c0       0x10 main.o
+                0x001040c0                List<int>::~List()
+ .gnu.linkonce.t._ZN4ListIiE5CountEv
+                0x001040d0       0x10 main.o
+                0x001040d0                List<int>::Count()
+ .gnu.linkonce.t._ZN4ListIiE4ItemEj
+                0x001040e0       0x70 main.o
+                0x001040e0                List<int>::Item(unsigned int)
+ .gnu.linkonce.t._ZN4ListIiE8ListItemIiEC1EiPS2_S3_
+                0x00104150       0x20 main.o
+                0x00104150                List<int>::ListItem<int>::ListItem(int, List<int>::ListItem<int>*, List<int>::ListItem<int>*)
+ .gnu.linkonce.t._ZN11IEnumeratorIiEC2Ev
+                0x00104170       0x10 main.o
+                0x00104170                IEnumerator<int>::IEnumerator()
+ .gnu.linkonce.t._ZN14ListEnumeratorIiEC1EP4ListIiE
+                0x00104180       0x40 main.o
+                0x00104180                ListEnumerator<int>::ListEnumerator(List<int>*)
+ .gnu.linkonce.t._ZN14ListEnumeratorIiE8MoveNextEv
+                0x001041c0       0x40 main.o
+                0x001041c0                ListEnumerator<int>::MoveNext()
+ .gnu.linkonce.t._ZN14ListEnumeratorIiE5ResetEv
+                0x00104200       0x10 main.o
+                0x00104200                ListEnumerator<int>::Reset()
+ .gnu.linkonce.t._ZN14ListEnumeratorIiE10GetCurrentEv
+                0x00104210       0x30 main.o
+                0x00104210                ListEnumerator<int>::GetCurrent()
+ .gnu.linkonce.t._ZN14HeaderComparer7CompareEP8header_tS1_
+                0x00104240       0x20 pmm.o
+                0x00104240                HeaderComparer::Compare(header_t*, header_t*)
+ .gnu.linkonce.t._ZN9PredicateIP8header_tEC2Ev
+                0x00104260       0x10 pmm.o
+                0x00104260                Predicate<header_t*>::Predicate()
+ .gnu.linkonce.t._ZN14HeaderComparerC1Ev
+                0x00104270       0x20 pmm.o
+                0x00104270                HeaderComparer::HeaderComparer()
+ .gnu.linkonce.t._ZN12OrderedArrayIP8header_tEC1EjjP9PredicateIS1_E
+                0x00104290       0x30 pmm.o
+                0x00104290                OrderedArray<header_t*>::OrderedArray(unsigned int, unsigned int, Predicate<header_t*>*)
+ .gnu.linkonce.t._ZN12OrderedArrayIP8header_tE6InsertES1_
+                0x001042c0      0x110 heap.o
+                0x001042c0                OrderedArray<header_t*>::Insert(header_t*)
+ .gnu.linkonce.t._ZN12OrderedArrayIP8header_tE4SizeEv
+                0x001043d0       0x10 heap.o
+                0x001043d0                OrderedArray<header_t*>::Size()
+ .gnu.linkonce.t._ZN12OrderedArrayIP8header_tE6LookupEj
+                0x001043e0       0x20 heap.o
+                0x001043e0                OrderedArray<header_t*>::Lookup(unsigned int)
+ .gnu.linkonce.t._ZN12OrderedArrayIP8header_tE6RemoveEj
+                0x00104400       0x60 heap.o
+                0x00104400                OrderedArray<header_t*>::Remove(unsigned int)
+ .gnu.linkonce.t._ZN7VFSNode11CompareNameEPKc
+                0x00104460       0x20 vfs.o
+                0x00104460                VFSNode::CompareName(char const*)
+ .gnu.linkonce.t._ZN3VFS11GetRootNodeEv
+                0x00104480       0x10 vfs.o
+                0x00104480                VFS::GetRootNode()
+ .gnu.linkonce.t._ZN10FileSystemC2Ev
+                0x00104490       0x10 vfs.o
+                0x00104490                FileSystem::FileSystem()
+ .gnu.linkonce.t._ZN11IEnumerableIP7VFSNodeEC2Ev
+                0x001044a0       0x10 vfs.o
+                0x001044a0                IEnumerable<VFSNode*>::IEnumerable()
+ .gnu.linkonce.t._ZN4ListIP7VFSNodeEC1Ev
+                0x001044b0       0x40 vfs.o
+                0x001044b0                List<VFSNode*>::List()
+ .gnu.linkonce.t._ZN4ListIP7VFSNodeE3AddES1_
+                0x001044f0       0x80 vfs.o
+                0x001044f0                List<VFSNode*>::Add(VFSNode*)
+ .gnu.linkonce.t._ZN4ListIP7VFSNodeE5CountEv
+                0x00104570       0x10 vfs.o
+                0x00104570                List<VFSNode*>::Count()
+ .gnu.linkonce.t._ZN4ListIP7VFSNodeE4ItemEj
+                0x00104580       0x70 vfs.o
+                0x00104580                List<VFSNode*>::Item(unsigned int)
+ .gnu.linkonce.t._ZN4ListIP7VFSNodeE8ListItemIS1_EC1ES1_PS4_S5_
+                0x001045f0       0x20 vfs.o
+                0x001045f0                List<VFSNode*>::ListItem<VFSNode*>::ListItem(VFSNode*, List<VFSNode*>::ListItem<VFSNode*>*, List<VFSNode*>::ListItem<VFSNode*>*)
+ .gnu.linkonce.t._ZN4ListIP7VFSNodeE13GetEnumeratorEv
+                0x00104610       0x30 vfs.o
+                0x00104610                List<VFSNode*>::GetEnumerator()
+ .gnu.linkonce.t._ZN11IEnumeratorIP7VFSNodeEC2Ev
+                0x00104640       0x10 vfs.o
+                0x00104640                IEnumerator<VFSNode*>::IEnumerator()
+ .gnu.linkonce.t._ZN14ListEnumeratorIP7VFSNodeEC1EP4ListIS1_E
+                0x00104650       0x40 vfs.o
+                0x00104650                ListEnumerator<VFSNode*>::ListEnumerator(List<VFSNode*>*)
+ .gnu.linkonce.t._ZN14ListEnumeratorIP7VFSNodeE8MoveNextEv
+                0x00104690       0x40 vfs.o
+                0x00104690                ListEnumerator<VFSNode*>::MoveNext()
+ .gnu.linkonce.t._ZN14ListEnumeratorIP7VFSNodeE5ResetEv
+                0x001046d0       0x10 vfs.o
+                0x001046d0                ListEnumerator<VFSNode*>::Reset()
+ .gnu.linkonce.t._ZN14ListEnumeratorIP7VFSNodeE10GetCurrentEv
+                0x001046e0       0x30 vfs.o
+                0x001046e0                ListEnumerator<VFSNode*>::GetCurrent()
+                0x00105000                . = ALIGN (0x1000)
+ *fill*         0x00104710      0x8f0 00
+
+.data           0x00105000     0x1000
+                0x00105000                data = .
+                0x00105000                _data = .
+                0x00105000                __data = .
+ *(.data)
+ .data          0x00105000        0x0 main.o
+ .data          0x00105000        0x0 common.o
+ .data          0x00105000        0x0 gdt.o
+ .data          0x00105000        0x0 idt.o
+ .data          0x00105000       0x10 console.o
+ .data          0x00105010        0x0 pmm.o
+ .data          0x00105010        0x0 heap.o
+ .data          0x00105010        0x0 dev.o
+ .data          0x00105010        0x0 pit.o
+ .data          0x00105010        0x0 vfs.o
+ *(.rodata)
+ *(.gnu.linkonce.d.*)
+ *(.gnu.linkonce.r.*)
+ .gnu.linkonce.r._ZTV14ListEnumeratorIiE
+                0x00105010       0x20 main.o
+                0x00105010                vtable for ListEnumerator<int>
+ .gnu.linkonce.r._ZTV11IEnumeratorIiE
+                0x00105030       0x20 main.o
+                0x00105030                vtable for IEnumerator<int>
+ .gnu.linkonce.r._ZTV4ListIiE
+                0x00105050       0x10 main.o
+                0x00105050                vtable for List<int>
+ .gnu.linkonce.r._ZTV11IEnumerableIiE
+                0x00105060       0x10 main.o
+                0x00105060                vtable for IEnumerable<int>
+ .gnu.linkonce.r._ZTV6Device
+                0x00105070       0x10 main.o
+                0x00105070                vtable for Device
+ .gnu.linkonce.r._ZTV14HeaderComparer
+                0x00105080       0x10 pmm.o
+                0x00105080                vtable for HeaderComparer
+ .gnu.linkonce.r._ZTV9PredicateIP8header_tE
+                0x00105090       0x10 pmm.o
+                0x00105090                vtable for Predicate<header_t*>
+ .gnu.linkonce.r._ZTV9PITDevice
+                0x001050a0       0x10 pit.o
+                0x001050a0                vtable for PITDevice
+ .gnu.linkonce.r._ZTV6RootFS
+                0x001050b0       0x30 vfs.o
+                0x001050b0                vtable for RootFS
+ .gnu.linkonce.r._ZTV4ListIP7VFSNodeE
+                0x001050e0       0x10 vfs.o
+                0x001050e0                vtable for List<VFSNode*>
+ .gnu.linkonce.r._ZTV11IEnumerableIP7VFSNodeE
+                0x001050f0       0x10 vfs.o
+                0x001050f0                vtable for IEnumerable<VFSNode*>
+ .gnu.linkonce.r._ZTV10FileSystem
+                0x00105100       0x30 vfs.o
+                0x00105100                vtable for FileSystem
+ .gnu.linkonce.r._ZTV14ListEnumeratorIP7VFSNodeE
+                0x00105130       0x20 vfs.o
+                0x00105130                vtable for ListEnumerator<VFSNode*>
+ .gnu.linkonce.r._ZTV11IEnumeratorIP7VFSNodeE
+                0x00105150       0x20 vfs.o
+                0x00105150                vtable for IEnumerator<VFSNode*>
+                0x00106000                . = ALIGN (0x1000)
+ *fill*         0x00105170      0xe90 00
+                0x00106000                _bss_start = .
+
+.bss            0x00106000     0x1000
+                0x00106000                bss = .
+                0x00106000                _bss = .
+                0x00106000                __bss = .
+ *(.bss)
+ .bss           0x00106000        0x0 main.o
+ .bss           0x00106000        0x0 common.o
+ .bss           0x00106000       0x30 gdt.o
+ .bss           0x00106030      0xc10 idt.o
+ .bss           0x00106c40        0x4 console.o
+ .bss           0x00106c44       0x18 pmm.o
+                0x00106c44                g_heap
+                0x00106c48                placement_address
+                0x00106c4c                kernel_directory
+                0x00106c50                current_directory
+ .bss           0x00106c5c        0x0 heap.o
+ .bss           0x00106c5c        0x0 dev.o
+ .bss           0x00106c5c        0x4 pit.o
+ .bss           0x00106c60        0x4 vfs.o
+ *(.gnu.linkonce.b.*)
+                0x00107000                . = ALIGN (0x1000)
+ *fill*         0x00106c64      0x39c 00
+                0x00107000                _bss_end = .
+                0x00107000                end = .
+                0x00107000                _end = .
+                0x00107000                __end = .
+LOAD boot.o
+LOAD main.o
+LOAD common.o
+LOAD interrupt.o
+LOAD gdt.o
+LOAD idt.o
+LOAD console.o
+LOAD pmm.o
+LOAD heap.o
+LOAD dev.o
+LOAD pit.o
+LOAD vfs.o
+OUTPUT(kernel coff-go32)
+
+.comment        0x00000000       0xc8
+ .comment       0x00000000       0x14 main.o
+ .comment       0x00000014       0x14 common.o
+ .comment       0x00000028       0x14 gdt.o
+ .comment       0x0000003c       0x14 idt.o
+ .comment       0x00000050       0x14 console.o
+ .comment       0x00000064       0x14 pmm.o
+ .comment       0x00000078       0x14 heap.o
+ .comment       0x0000008c       0x14 dev.o
+ .comment       0x000000a0       0x14 pit.o
+ .comment       0x000000b4       0x14 vfs.o
+
+.eh_frame       0x00107000     0x1028
+ .eh_frame      0x00107000      0x248 main.o
+ .eh_frame      0x00107248      0x1e0 common.o
+ .eh_frame      0x00107428       0x58 gdt.o
+ .eh_frame      0x00107480      0x128 idt.o
+ .eh_frame      0x001075a8      0x13c console.o
+ .eh_frame      0x001076e4      0x210 pmm.o
+ .eh_frame      0x001078f4      0x254 heap.o
+ .eh_frame      0x00107b48       0x58 pit.o
+ .eh_frame      0x00107ba0      0x488 vfs.o
